@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D myRigidbody;
     public GameObject[] cookies;
+    
 
     SpriteRenderer sprite;
     Color newColor;
@@ -25,18 +27,30 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        myRigidbody = GetComponent<Rigidbody2D>();
-        cookies = GameObject.FindGameObjectsWithTag("Cookie");
-        timerIsRunning = false;
-        timeRemaining = 7;
-        print(timerIsRunning);
-        FindObjectOfType<AudioManager>().Play("BgMusic");
-
+            Time.timeScale = 1;
+            myRigidbody = GetComponent<Rigidbody2D>();
+            cookies = GameObject.FindGameObjectsWithTag("Cookie");
+            timerIsRunning = false;
+            timeRemaining = 7;
+            FindObjectOfType<AudioManager>().Play("BgMusic");
     }
 
     // Update is called once per frame
     void Update()
     {
+        
+        if (Input.GetKeyDown(KeyCode.R))
+         {
+             print("Game restarted");
+             SceneManager.LoadScene(0);
+             Time.timeScale = 1;
+         }
+
+         if (Input.GetKeyDown(KeyCode.Escape))
+         {
+             Application.Quit();
+         }
+
         if (timerIsRunning == true){
             if (timeRemaining > 0){
                 timeRemaining -= Time.deltaTime;
@@ -65,6 +79,10 @@ public class Player : MonoBehaviour
             }
         transform.position = newPosition;
 
+        if (Time.timeScale == 0){
+            FindObjectOfType<AudioManager>().Stop("BgMusic");
+        }
+
     }
 
     // OnTriggerEnter2D is called once, when two GameObjects with Collider2Ds hit each other
@@ -74,7 +92,6 @@ public class Player : MonoBehaviour
         if(coll.gameObject.tag.Equals("Cookie")) {
             FindObjectOfType<AudioManager>().Play("Cookie");
             cookiesEaten += 1;
-            print(cookiesEaten);
             Destroy(coll.gameObject);
         }
 
@@ -82,7 +99,6 @@ public class Player : MonoBehaviour
             FindObjectOfType<AudioManager>().Play("Cherry");
             timerIsRunning = true;
             timeRemaining = 7;
-            print("Timer has started");
             Destroy(coll.gameObject);
             
         }
@@ -95,7 +111,7 @@ public class Player : MonoBehaviour
             }
             else{
             FindObjectOfType<AudioManager>().Play("PlayerLose");
-            print("You died");
+            print("You died. Please press 'R' to restart the game or 'Esc' to exit it.");
             Time.timeScale = 0;
             }
         }
@@ -105,8 +121,12 @@ public class Player : MonoBehaviour
         if(cookiesEaten == cookiesAmount){
 
             FindObjectOfType<AudioManager>().Play("PlayerWin");
-            print("You collected all the cookies and won the game!");
+            print("You collected all the cookies and won the level!");
             Time.timeScale = 0;
+            SceneManager.LoadScene("pacman 1");
+            if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
+                Time.timeScale = 1;
+            }
         }
     }
 
@@ -115,4 +135,5 @@ public class Player : MonoBehaviour
     void OnCollisionEnter2D(Collision2D coll) {
 
     }
+
 }

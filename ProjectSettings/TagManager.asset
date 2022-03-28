@@ -9,6 +9,7 @@ TagManager:
   - Cookie
   - Cherry
   - Ghost
+  - Button
   layers:
   - Default
   - TransparentFX
@@ -45,4 +46,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 2118824949
     locked: 0
