@@ -15,6 +15,12 @@ EditorBuildSettings:
     path: Assets/Scenes/pacman.unity
     guid: ca0254366cfefa1408379e13ffa2ced8
   - enabled: 1
+    path: Assets/Scenes/newLvl.unity
+    guid: 920d61b3631bc3749abd643fa044bdc6
+  - enabled: 1
     path: Assets/Scenes/pacman 1.unity
     guid: 2fc0e5b89c24f874e8760d5a31d7df96
+  - enabled: 1
+    path: Assets/Scenes/gameover.unity
+    guid: c5a4005cbef3be3489983c0f01d43b96
   m_configObjects: {}

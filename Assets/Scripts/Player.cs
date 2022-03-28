@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public float moveSpeed = 5f;
     public float timeRemaining = 7;
     public bool timerIsRunning = false;
-    public Text timeText;
+    public Text counter;
 
     private Rigidbody2D myRigidbody;
     public GameObject[] cookies;
@@ -33,6 +33,8 @@ public class Player : MonoBehaviour
             timerIsRunning = false;
             timeRemaining = 7;
             FindObjectOfType<AudioManager>().Play("BgMusic");
+
+            counter = GetComponent <Text> ();
     }
 
     // Update is called once per frame
@@ -77,11 +79,26 @@ public class Player : MonoBehaviour
             if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) {
                 newPosition.y -= moveSpeed * Time.deltaTime;
             }
+
+            if(transform.position.x > 14.3){
+                newPosition.x = -14;
+            }
+
+            if(transform.position.x < -14.6){
+                newPosition.x = 14;
+            }
+
+            
+
         transform.position = newPosition;
+
+        counter.text = "Cookies eaten: " + cookiesEaten.ToString();
 
         if (Time.timeScale == 0){
             FindObjectOfType<AudioManager>().Stop("BgMusic");
         }
+
+        
 
     }
 
@@ -110,24 +127,18 @@ public class Player : MonoBehaviour
                 Destroy(coll.gameObject);
             }
             else{
-            FindObjectOfType<AudioManager>().Play("PlayerLose");
-            print("You died. Please press 'R' to restart the game or 'Esc' to exit it.");
-            Time.timeScale = 0;
+            SceneManager.LoadScene("gameover");
             }
         }
 
         int cookiesAmount = cookies.Length;
 
         if(cookiesEaten == cookiesAmount){
-
-            FindObjectOfType<AudioManager>().Play("PlayerWin");
-            print("You collected all the cookies and won the level!");
-            Time.timeScale = 0;
-            SceneManager.LoadScene("pacman 1");
-            if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
-                Time.timeScale = 1;
-            }
+            SceneManager.LoadScene("newLvl");
         }
+
+
+        
     }
 
     // OnCollisionEnter2D is called once, when two GameObjects with Collider2Ds hit each other
